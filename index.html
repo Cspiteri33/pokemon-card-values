@@ -159,7 +159,7 @@
 
     <footer>
       <p>Ratings are Goodreads averages out of 5, checked September 2026, and will shift as more readers rate the books. Ties are broken by number of ratings. The newest book, <i>A Sprinkle in Time</i> (#15), is left out because it has too few ratings so far. Book #1, <i>Dog Man</i>, has the most readers of all, though its rating (4.10) is lower than the rest of the series.</p>
-      <p>Source: <a href="https://www.goodreads.com/series/188395-dog-man" rel="noopener noreferrer">Goodreads: Dog Man series</a></p>
+      <p>Sources: ratings from <a href="https://www.goodreads.com/series/188395-dog-man" rel="noopener noreferrer">Goodreads: Dog Man series</a>. The one-line summaries are our own, based on each book's description at <a href="https://www.barnesandnoble.com/b/series/dog-man-series/_/N-2th6" rel="noopener noreferrer">Barnes &amp; Noble</a>.</p>
       <p>Dog Man is a trademark of Dav Pilkey, published by Scholastic. This is an unofficial fan page.</p>
     </footer>
   </section>
@@ -230,16 +230,16 @@
 
   // Dog Man: Goodreads average ratings, Sept 2026
   const books = [
-    { n: 12, title: "The Scarlet Shedder",      rating: 4.54, count: 7529,  note: "Dog Man faces a new foe as the gang tries to keep the peace in the city." },
-    { n: 7,  title: "For Whom the Ball Rolls",  rating: 4.51, count: 15155 },
-    { n: 9,  title: "Grime and Punishment",     rating: 4.51, count: 12728 },
-    { n: 14, title: "Big Jim Believes",         rating: 4.51, count: 2939,  note: "The Big Jim story continues in one of the newest books in the series." },
-    { n: 8,  title: "Fetch-22",                 rating: 4.50, count: 15108 },
-    { n: 10, title: "Mothering Heights",        rating: 4.50, count: 10484 },
-    { n: 5,  title: "Lord of the Fleas",        rating: 4.49, count: 19121 },
-    { n: 6,  title: "Brawl of the Wild",        rating: 4.49, count: 16848 },
-    { n: 4,  title: "Dog Man and Cat Kid",      rating: 4.48, count: 21270 },
-    { n: 3,  title: "A Tale of Two Kitties",    rating: 4.47, count: 20741 },
+    { n: 12, title: "The Scarlet Shedder",      rating: 4.54, count: 7529,  note: "Dog Man faces a new foe as the gang tries to keep the peace in the city.", note: "A skunk attack and a tomato-juice bath leave Dog Man stuck bright red and shunned by the city, but he still has to save everyone when a brand-new villain unleashes a robot army." },
+    { n: 7,  title: "For Whom the Ball Rolls",  rating: 4.51, count: 15155, note: "Dog Man's bad habits turn into fears just as a new supervillain comes after him, while Petey's own dad shows up and makes Petey rethink what being good really means." },
+    { n: 9,  title: "Grime and Punishment",     rating: 4.51, count: 12728, note: "The heroes have just won big, but Dog Man hits a fresh problem that's too much to handle alone, so the whole team has to pitch in." },
+    { n: 14, title: "Big Jim Believes",         rating: 4.51, count: 2939,  note: "The Big Jim story continues in one of the newest books in the series.", note: "The Space Cuties are back, and Dog Man, Commander Cupcake, Sprinkles and Mecha Molly find their city turned upside down, in a story about honesty and believing in yourself." },
+    { n: 8,  title: "Fetch-22",                 rating: 4.50, count: 15108, note: "Petey is out of jail and trying to start over while Li'l Petey is losing faith in the world, so Petey and Dog Man have to stop squabbling and work as a team." },
+    { n: 10, title: "Mothering Heights",        rating: 4.50, count: 10484, note: "New villains pour into town, Grampa causes trouble, and Petey has to face his past, with hope and kindness as the heroes' best tools." },
+    { n: 5,  title: "Lord of the Fleas",        rating: 4.49, count: 19121, note: "A new gang of bad guys hits town, and Dog Man, Li'l Petey and a robot pal must team up with an unlikely helper: Petey, the World's Most Evil Cat." },
+    { n: 6,  title: "Brawl of the Wild",        rating: 4.49, count: 16848, note: "Framed for a crime, Dog Man lands in the pound and struggles to fit in with dogs or people while his friends race to clear his name." },
+    { n: 4,  title: "Dog Man and Cat Kid",      rating: 4.48, count: 21270, note: "A movie star goes missing from a film set, and Dog Man and his new kitten sidekick set out to crack the case." },
+    { n: 3,  title: "A Tale of Two Kitties",    rating: 4.47, count: 20741, note: "Petey brings home a tiny, super-cute kitten, and Dog Man suddenly has twice the trouble to deal with." },
   ];
   const stars = r => "★".repeat(Math.round(r)) + "☆".repeat(5 - Math.round(r));
   const minR = 4.3, maxR = Math.max(...books.map(b => b.rating));
@@ -256,6 +256,7 @@
       <p class="price">${b.rating.toFixed(2)}</p>
       <p class="meta">Dog Man #${b.n} · <span class="stars" aria-hidden="true">${stars(b.rating)}</span> ${b.count.toLocaleString("en-US")} ratings</p>
       <div class="bar" aria-hidden="true"><i style="width:${((b.rating - minR) / (maxR - minR) * 100).toFixed(1)}%"></i></div>
+      <p class="note">${b.note}</p>
     </li>`).join("");
 
   // Switch between the two lists; #dogman in the address opens that tab directly
