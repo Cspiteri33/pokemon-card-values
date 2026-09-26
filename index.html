@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Most Valuable Pokémon Cards</title>
+<meta name="description" content="The ten most expensive Pokémon cards ever sold, ranked by recorded sale price.">
+<meta name="referrer" content="no-referrer">
+<style>
+  :root {
+    --bg: #f7f5ef;
+    --surface: #ffffff;
+    --text: #1c1d22;
+    --muted: #5d6070;
+    --line: #e4e1d8;
+    --accent: #c8321f;
+    --gold: #b8860b;
+    --bar: #e0a526;
+    --chip: #f3eee1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121317;
+      --surface: #1b1d23;
+      --text: #ecebe6;
+      --muted: #a2a5b3;
+      --line: #2e313a;
+      --accent: #ff6b57;
+      --gold: #f0c04a;
+      --bar: #e8b63f;
+      --chip: #262830;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 920px; margin: 0 auto; padding: 48px 16px 64px; }
+
+  header .eyebrow { color: var(--accent); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px; }
+  header h1 { font-size: clamp(1.9rem, 5vw, 2.7rem); line-height: 1.12; margin: 0 0 12px; letter-spacing: -0.02em; }
+  header p { color: var(--muted); margin: 0; max-width: 62ch; }
+
+  .total { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 0; }
+  .total div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; min-width: 150px; }
+  .total b { display: block; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+  .total span { color: var(--muted); font-size: 0.85rem; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 32px 0 16px; }
+  .controls > span { color: var(--muted); font-size: 0.9rem; margin-right: 4px; }
+  .controls button {
+    font: inherit; font-size: 0.9rem; cursor: pointer;
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  }
+  .controls button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  li {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 20px; display: grid; grid-template-columns: 48px 1fr auto; gap: 2px 16px; align-items: start;
+  }
+  .rank {
+    grid-row: span 4; width: 48px; height: 48px; border-radius: 12px;
+    background: var(--chip); color: var(--text);
+    display: grid; place-items: center; font-weight: 750; font-size: 1.15rem;
+  }
+  li:first-child .rank { background: var(--gold); color: #1c1d22; }
+  .name { font-size: 1.15rem; font-weight: 650; margin: 0; }
+  .price { grid-row: span 2; text-align: right; font-size: 1.3rem; font-weight: 750; font-variant-numeric: tabular-nums; margin: 0; white-space: nowrap; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin: 0; }
+  .tags { grid-column: 2 / 4; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tags span { background: var(--chip); border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; }
+  .bar { grid-column: 2 / 4; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 12px; }
+  .bar i { display: block; height: 100%; min-width: 3px; background: var(--bar); border-radius: 3px; }
+  .note { grid-column: 2 / 4; margin: 10px 0 0; font-size: 0.92rem; }
+
+  footer { margin-top: 36px; color: var(--muted); font-size: 0.85rem; }
+  footer a { color: inherit; }
+  footer ul { padding-left: 18px; margin: 6px 0 0; }
+
+  @media (max-width: 560px) {
+    li { grid-template-columns: 1fr; padding: 16px; }
+    .rank { grid-row: auto; width: 38px; height: 38px; font-size: 1rem; }
+    .price { grid-row: auto; text-align: left; }
+    .tags, .bar, .note { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">Record sales</p>
+    <h1>The Most Valuable Pokémon Cards Ever Sold</h1>
+    <p>Ten Pokémon cards ranked by the highest price each one has fetched at auction or in a reported private sale. Most are prize cards or promos made in tiny numbers, and all of them are professionally graded.</p>
+    <div class="total" id="summary"></div>
+  </header>
+
+  <div class="controls" role="group" aria-label="Sort cards">
+    <span>Sort by</span>
+    <button type="button" data-sort="price" aria-pressed="true">Price</button>
+    <button type="button" data-sort="year" aria-pressed="false">Year sold</button>
+    <button type="button" data-sort="name" aria-pressed="false">Name</button>
+  </div>
+
+  <ol id="list"></ol>
+
+  <footer>
+    <p>Prices are recorded sale prices in US dollars, not current market values, and sources sometimes report different figures for the same sale. A card's value depends heavily on its grade: a copy in lower condition can sell for a small fraction of these amounts.</p>
+    <p>Sources (checked September 2026):</p>
+    <ul>
+      <li><a href="https://www.guinnessworldrecords.com/world-records/452634-most-expensive-pokemon-trading-card-sold-at-auction" rel="noopener noreferrer">Guinness World Records: most expensive Pokémon card sold at auction</a></li>
+      <li><a href="https://www.si.com/collectibles/world-record-charizard-headlines-top-pokemon-card-sales-of-march-2026" rel="noopener noreferrer">Sports Illustrated: top Pokémon card sales of March 2026</a></li>
+      <li><a href="https://www.wargamer.com/pokemon-trading-card-game/rare-pokemon-cards" rel="noopener noreferrer">Wargamer: most expensive rare Pokémon cards</a></li>
+    </ul>
+    <p>Pokémon is a trademark of Nintendo, Creatures and Game Freak. This is an unofficial fan page.</p>
+  </footer>
+</main>
+
+<script>
+  const cards = [
+    { name: "Pikachu Illustrator", detail: "1998 CoroCoro Comic illustration contest promo", grade: "PSA 10", price: 16492000, sold: "Feb 2026", year: 2026, venue: "Goldin Auctions",
+      note: "Given only to winners of a 1998 art contest. This is the only copy graded PSA 10; Logan Paul sold it for a Guinness world record." },
+    { name: "Trophy Pikachu No. 1 Trainer", detail: "1999 Japanese official tournament prize", grade: "PSA 9", price: 3000000, sold: "2025", year: 2025, venue: "Reported sale",
+      note: "Awarded to the winners of early Japanese Pokémon tournaments, so only a handful exist." },
+    { name: "Trophy Pikachu No. 3 Trainer", detail: "Japanese tournament prize (bronze)", grade: "PSA 10", price: 1769000, sold: "May 2026", year: 2026, venue: "Goldin Auctions",
+      note: "The third-place version of the trophy card, and one of very few in perfect condition." },
+    { name: "Charizard, No Rarity Symbol", detail: "1996 Japanese Base Set", grade: "PSA 10", price: 1700000, sold: "Mar 2026", year: 2026, venue: "Reported by Sports Illustrated",
+      note: "The first print of the Japanese Charizard, missing its rarity symbol. The first Charizard to sell for over $1 million." },
+    { name: "Charizard, Signed by Mitsuhiro Arita", detail: "Japanese Base Set, signed by the card's illustrator", grade: "PSA 10", price: 1232200, sold: "Mar 2026", year: 2026, venue: "Reported by Sports Illustrated",
+      note: "A perfect-grade Japanese Charizard whose case was signed by Arita, the artist who drew it." },
+    { name: "1st Edition Charizard", detail: "1999 Base Set holo", grade: "TAG 10", price: 700000, sold: "2026", year: 2026, venue: "Private sale",
+      note: "The most famous card in the English-language hobby, from the first print run of the first set." },
+    { name: "Prerelease Raichu", detail: "1999 Base Set test print", grade: "PSA 6", price: 550000, sold: "Sep 2025", year: 2025, venue: "Heritage Auctions",
+      note: "Long rumoured to be a myth; only a few copies were stamped “Prerelease” by Wizards of the Coast staff." },
+    { name: "Charizard, Topsun Blue Back", detail: "1995 Japanese Topsun gum card", grade: "PSA 10", price: 493230, sold: "Jan 2021", year: 2021, venue: "Goldin Auctions",
+      note: "From a Japanese chewing-gum promotion that predates the trading card game; the blue-back version is the rarest." },
+    { name: "Trophy Pikachu No. 2 Trainer", detail: "Japanese tournament prize (silver)", grade: "PSA 10", price: 444000, sold: "Jul 2023", year: 2023, venue: "Goldin Auctions",
+      note: "The second-place trophy card, in perfect condition." },
+    { name: "Presentation Blastoise", detail: "1998 Wizards of the Coast test print", grade: "CGC 8.5", price: 360000, sold: "Jan 2021", year: 2021, venue: "Heritage Auctions",
+      note: "Printed to pitch the game to Wizards of the Coast before its English release. Only two are known to exist." },
+  ];
+
+  const maxPrice = Math.max(...cards.map(c => c.price));
+  const usd = n => "$" + n.toLocaleString("en-US");
+  const short = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(n >= 1e7 ? 1 : 2).replace(/\.?0+$/, "") + "M" : "$" + Math.round(n / 1e3) + "K";
+  const rankOf = new Map([...cards].sort((a, b) => b.price - a.price).map((c, i) => [c.name, i + 1]));
+
+  document.getElementById("summary").innerHTML = `
+    <div><b>${short(maxPrice)}</b><span>record sale</span></div>
+    <div><b>${short(cards.reduce((s, c) => s + c.price, 0))}</b><span>combined, all ten</span></div>
+    <div><b>${cards.filter(c => c.name.includes("Charizard")).length}</b><span>Charizards in the top ten</span></div>`;
+
+  const list = document.getElementById("list");
+  const sorters = {
+    price: (a, b) => b.price - a.price,
+    year:  (a, b) => b.year - a.year || b.price - a.price,
+    name:  (a, b) => a.name.localeCompare(b.name),
+  };
+
+  function render(key) {
+    list.innerHTML = [...cards].sort(sorters[key]).map(c => `
+      <li>
+        <div class="rank" aria-label="Rank ${rankOf.get(c.name)} by price">${rankOf.get(c.name)}</div>
+        <p class="name">${c.name}</p>
+        <p class="price">${usd(c.price)}</p>
+        <p class="meta">${c.detail}</p>
+        <div class="tags"><span>${c.grade}</span><span>Sold ${c.sold}</span><span>${c.venue}</span></div>
+        <div class="bar" aria-hidden="true"><i style="width:${(c.price / maxPrice * 100).toFixed(2)}%"></i></div>
+        <p class="note">${c.note}</p>
+      </li>`).join("");
+  }
+
+  document.querySelectorAll(".controls button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".controls button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+      render(btn.dataset.sort);
+    });
+  });
+
+  render("price");
+</script>
+</body>
+</html>
